@@ -2,91 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Model Prediction</title>
+    <title>Arrhythmia Prediction - Hybrid Model</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f8f9fa;
         }
-        .container {
-            width: 50%;
-            margin: 0 auto;
+        h1 {
+            color: #343a40;
         }
-        .output {
-            margin-top: 20px;
+        form {
+            margin-bottom: 20px;
         }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .table, .table th, .table td {
-            border: 1px solid black;
-        }
-        .table th, .table td {
+        input[type="file"] {
             padding: 10px;
-            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+        }
+        pre {
+            background: #f1f1f1;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Upload Your Dataset</h1>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" name="file" required><br><br>
-            <button type="submit">Upload & Predict</button>
-        </form>
+    <h1>Arrhythmia Prediction for Cancer Patients</h1>
 
-        <div class="output" id="output">
-            <h3>Results:</h3>
-            <p id="log_reg_accuracy"></p>
-            <p id="knn_accuracy"></p>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="file" name="file" accept=".csv" required>
+        <button type="submit">Upload & Predict</button>
+    </form>
 
-            <h3>Confusion Matrix (Logistic Regression):</h3>
-            <table class="table" id="cm_log_reg"></table>
-
-            <h3>Confusion Matrix (KNN):</h3>
-            <table class="table" id="cm_knn"></table>
-        </div>
+    <div class="results" id="results" style="display:none;">
+        <h2>Prediction Results</h2>
+        <pre id="output"></pre>
     </div>
 
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        const form = document.getElementById('uploadForm');
+        const output = document.getElementById('output');
+        const resultsDiv = document.getElementById('results');
 
-            let formData = new FormData(this);
-            fetch('/predict', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Display Accuracy
-                document.getElementById('log_reg_accuracy').textContent = `Logistic Regression Accuracy: ${data.accuracy_log_reg}`;
-                document.getElementById('knn_accuracy').textContent = `KNN Accuracy: ${data.accuracy_knn}`;
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
 
-                // Display Confusion Matrices
-                displayConfusionMatrix('cm_log_reg', data.cm_log_reg);
-                displayConfusionMatrix('cm_knn', data.cm_knn);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
+            const fileInput = document.getElementById('file');
+            if (!fileInput.files.length) {
+                alert("Please upload a CSV file.");
+                return;
+            }
 
-        function displayConfusionMatrix(elementId, cm) {
-            let table = document.getElementById(elementId);
-            table.innerHTML = '';  // Clear previous content
-            cm.forEach(row => {
-                let tr = document.createElement('tr');
-                row.forEach(cell => {
-                    let td = document.createElement('td');
-                    td.textContent = cell;
-                    tr.appendChild(td);
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            output.textContent = 'Processing...';
+            resultsDiv.style.display = 'block';
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
                 });
-                table.appendChild(tr);
-            });
-        }
+
+                const result = await response.json();
+
+                if (result.error) {
+                    output.textContent = `Error: ${result.error}`;
+                } else {
+                    output.textContent = `
+Logistic Regression Accuracy: ${result.accuracy_log_reg}
+KNN Accuracy: ${result.accuracy_knn}
+Neural Network Accuracy: ${result.accuracy_nn}
+
+Confusion Matrix (Logistic Regression):
+${JSON.stringify(result.cm_log_reg)}
+
+Confusion Matrix (KNN):
+${JSON.stringify(result.cm_knn)}
+
+Confusion Matrix (Neural Network):
+${JSON.stringify(result.cm_nn)}
+                    `;
+                }
+            } catch (error) {
+                output.textContent = `Request failed: ${error}`;
+            }
+        });
     </script>
 </body>
 </html>
