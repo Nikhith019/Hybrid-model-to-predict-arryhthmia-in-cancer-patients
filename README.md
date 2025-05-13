@@ -7,8 +7,13 @@ This project aims to develop a hybrid machine learning model for predicting arrh
 The project includes a full pipeline that involves:
 
 Data Preprocessing
+
 Feature Engineering
+
 Model Training (Hybrid Model)
+
 Model Evaluation
+
 Deployment for Prediction
-a
+
+
