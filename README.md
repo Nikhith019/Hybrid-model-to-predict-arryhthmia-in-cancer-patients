@@ -79,5 +79,40 @@ Make sure you have Python installed (preferably Python 3.8 or higher). You can i
 
 ### 1. Clone the repository:
 
+git clone https://github.com/your-username/arrhythmia-cancer-prediction.git
+
+cd arrhythmia-cancer-prediction
+
+### 2. Install Dependencies:
+
+You can install the dependencies by running the following:
+
+pip install -r requirements.txt
+
+### 3. Dependencies (requirements.txt)
+
+The required dependencies for the project include:
+
+*TensorFlow: For training the deep learning model.
+
+*Scikit-learn: For traditional machine learning models.
+
+*Pandas: For data manipulation.
+
+*NumPy: For numerical operations.
+
+*Matplotlib/Seaborn: For data visualization.
+
+*SpaCy: For NLP preprocessing if required.
+
+*Other libraries: As per the requirements of preprocessing and evaluation.
+
+## 5.How to Use:
+
+* Clone the repo and place the dataset in the suitabale folder.
+  
+* specicy the path correctly in the model and run the model for the results.
+
+
 
 
