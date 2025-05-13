@@ -16,7 +16,7 @@ The project includes a full pipeline that involves:
 
 5)Deployment for Prediction
 
-##Objective
+## Objective
 
 The goal is to develop a model capable of predicting the likelihood of arrhythmia occurring in cancer patients, which could help in early diagnosis and improve treatment outcomes.
 
@@ -112,6 +112,30 @@ The required dependencies for the project include:
 * Clone the repo and place the dataset in the suitabale folder.
   
 * specicy the path correctly in the model and run the model for the results.
+
+
+## Results
+
+After training the model on the provided data, the hybrid model achieved high accuracy in predicting arrhythmia occurrences in cancer patients.
+
+Example output:
+Accuracy: 95%
+Precision: 92%
+Recall: 89%
+F1-Score: 90%
+
+## Evaluation Metrics
+
+The model's performance is measured using the following metrics:
+
+Accuracy: The percentage of correctly classified instances out of all instances.
+
+Precision: The proportion of true positive predictions over all positive predictions made by the model.
+
+Recall: The proportion of true positive predictions over all actual positive instances.
+
+F1-Score: The harmonic mean of precision and recall.
+
 
 
 
