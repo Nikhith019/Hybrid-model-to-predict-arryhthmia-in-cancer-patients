@@ -120,8 +120,11 @@ After training the model on the provided data, the hybrid model achieved high ac
 
 Example output:
 Accuracy: 95%
+
 Precision: 92%
+
 Recall: 89%
+
 F1-Score: 90%
 
 ## Evaluation Metrics
